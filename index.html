@@ -1,5 +1,5 @@
+```html
 <!doctype html>
-
 <html lang="ja">
 <head>
 <meta charset="utf-8">
@@ -8,58 +8,99 @@
 <title>あの空へ〜青のジャンプ〜 パート練習</title>
 
 <style>
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
-  font-family:system-ui,sans-serif;
-  background:#f4f7fb;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#eef6ff;
   color:#172033;
 }
 
 header{
   text-align:center;
   background:white;
-  padding:25px 15px;
+  padding:28px 15px;
+  box-shadow:0 2px 10px #0001;
+}
+
+header h1{
+  margin:0 0 8px;
+  font-size:28px;
+}
+
+header div{
+  color:#64748b;
 }
 
 main{
   max-width:900px;
   margin:auto;
-  padding:22px 15px;
+  padding:25px 15px;
 }
 
+/* パート選択 */
 .menu{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:14px;
+  gap:16px;
 }
 
 .part{
-  padding:25px;
+  padding:30px 15px;
   border:0;
   border-radius:18px;
   background:white;
   font-size:22px;
   font-weight:bold;
-  box-shadow:0 5px 20px #0001;
+  color:#172033;
+  box-shadow:0 5px 20px #0002;
   cursor:pointer;
+}
+
+.part:active{
+  transform:scale(.98);
+}
+
+/* 練習画面 */
+#practice{
+  display:none;
 }
 
 .top{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  gap:10px;
+}
+
+.top h2{
+  margin:0;
 }
 
 .back{
-  padding:10px;
+  padding:10px 16px;
   border:0;
   border-radius:10px;
+  background:white;
+  font-size:16px;
   cursor:pointer;
 }
 
 audio{
   width:100%;
-  margin:15px 0;
+  margin:20px 0;
+}
+
+.status{
+  background:white;
+  border-radius:12px;
+  padding:12px;
+  margin-bottom:15px;
+  text-align:center;
+  color:#64748b;
 }
 
 .lyrics{
@@ -85,10 +126,6 @@ audio{
   transform:scale(1.04);
 }
 
-#practice{
-  display:none;
-}
-
 @media(max-width:520px){
   .menu{
     grid-template-columns:1fr;
@@ -97,9 +134,12 @@ audio{
   .lyrics{
     height:60vh;
   }
+
+  header h1{
+    font-size:23px;
+  }
 }
 </style>
-
 </head>
 
 <body>
@@ -111,22 +151,33 @@ audio{
 
 <main>
 
+<!-- パート選択 -->
 <section id="menu">
+
   <div class="menu">
 
-```
-<button class="part" data-p="Soprano">ソプラノ</button>
+    <button class="part" data-p="Soprano">
+      ソプラノ
+    </button>
 
-<button class="part" data-p="Alto">アルト</button>
+    <button class="part" data-p="Alto">
+      アルト
+    </button>
 
-<button class="part" data-p="Tenor">テノール</button>
+    <button class="part" data-p="Tenor">
+      テノール
+    </button>
 
-<button class="part" data-p="Bass">ベース</button>
-```
+    <button class="part" data-p="Bass">
+      ベース
+    </button>
 
   </div>
+
 </section>
 
+
+<!-- 練習画面 -->
 <section id="practice">
 
   <div class="top">
@@ -134,7 +185,11 @@ audio{
     <button class="back">← 戻る</button>
   </div>
 
-<audio id="audio" controls preload="metadata"></audio>
+  <div class="status" id="status">
+    ▶️ 再生ボタンを押してください
+  </div>
+
+  <audio id="audio" controls preload="metadata"></audio>
 
   <div class="lyrics" id="lyrics"></div>
 
@@ -142,10 +197,14 @@ audio{
 
 </main>
 
+
 <script>
 
-const lyrics = [
+/* =========================
+   歌詞
+========================= */
 
+const lyrics = [
 "空をかける鳥たちも",
 "最初からうまく飛べたわけじゃない",
 "初めての自転車",
@@ -201,15 +260,83 @@ const lyrics = [
 "JUMP UP",
 "LET'S JUMP ALL",
 "JUMP UP"
-
 ];
 
 
-const box = document.getElementById("lyrics");
+/* =========================
+   音源ファイル
+========================= */
+
+/*
+  アルトは実際にGitHubへ入れた
+  ファイル名をそのまま指定
+*/
+
+const files = {
+
+  Alto:
+  "Nコン2009「あの空へ_～青のジャンプ～」_Alto[1].m4a",
+
+  /*
+    下の3つは、GitHubに入っている
+    実際のファイル名と違う場合は
+    あとでそこだけ変更できます。
+  */
+
+  Soprano:
+  "Nコン2009「あの空へ ～青のジャンプ～」 Soprano (1).m4a",
+
+  Tenor:
+  "Nコン2009「あの空へ ～青のジャンプ～」 Tenor.m4a",
+
+  Bass:
+  "Nコン2009「あの空へ ～青のジャンプ～」 Bass.m4a"
+};
+
+
+/* =========================
+   パート名
+========================= */
+
+const names = {
+  Soprano:"ソプラノ",
+  Alto:"アルト",
+  Tenor:"テノール",
+  Bass:"ベース"
+};
+
+
+/* =========================
+   HTML取得
+========================= */
+
+const box =
+  document.getElementById("lyrics");
+
+const audio =
+  document.getElementById("audio");
+
+const menu =
+  document.getElementById("menu");
+
+const practice =
+  document.getElementById("practice");
+
+const title =
+  document.getElementById("title");
+
+const status =
+  document.getElementById("status");
+
+
+/* =========================
+   歌詞を表示
+========================= */
 
 lyrics.forEach((text,index)=>{
 
-  const line = document.createElement("div");
+  const line =
+    document.createElement("div");
 
   line.className = "line";
 
@@ -222,74 +349,102 @@ lyrics.forEach((text,index)=>{
 });
 
 
-/*
-  GitHub上の音源ファイル名
-  必ずこの名前にしてください。
-*/
+/* =========================
+   パートボタン
+========================= */
 
-const files = {
+document
+.querySelectorAll(".part")
+.forEach(button=>{
 
-  Soprano: "Soprano.m4a",
+  button.onclick = ()=>{
 
-  Alto: "Nコン2009「あの空へ_～青のジャンプ～」_Alto[1].m4a",
+    const part =
+      button.dataset.p;
 
-  Tenor: "Tenor.m4a",
+    title.textContent =
+      names[part];
 
-  Bass: "Bass.m4a"
-
-};
-
-
-const names = {
-
-  Soprano: "ソプラノ",
-
-  Alto: "アルト",
-
-  Tenor: "テノール",
-
-  Bass: "ベース"
-
-};
-
-
-const audio = document.getElementById("audio");
-
-const menu = document.getElementById("menu");
-
-const practice = document.getElementById("practice");
-
-const title = document.getElementById("title");
-
-
-document.querySelectorAll(".part").forEach(button => {
-
-  button.onclick = () => {
-
-    const part = button.dataset.p;
-
-    title.textContent = names[part];
-
+    /* 前の音源を停止 */
     audio.pause();
 
-    audio.src = files[part];
+    audio.removeAttribute("src");
+
+    /* 新しい音源を設定 */
+    audio.src =
+      files[part];
 
     audio.load();
 
-    menu.style.display = "none";
+    /* 画面切り替え */
+    menu.style.display =
+      "none";
 
-    practice.style.display = "block";
+    practice.style.display =
+      "block";
+
+    status.textContent =
+      "▶️ 再生ボタンを押してください";
+
+    /* 上に戻す */
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
 
   };
 
 });
 
 
-/*
-  戻るボタン
-*/
+/* =========================
+   再生エラー確認
+========================= */
 
-document.querySelector(".back").onclick = () => {
+audio.addEventListener("error",()=>{
+
+  status.textContent =
+    "⚠️ 音源を読み込めませんでした。ファイル名を確認してください。";
+
+});
+
+
+/* =========================
+   再生開始
+========================= */
+
+audio.addEventListener("play",()=>{
+
+  status.textContent =
+    "🎵 再生中";
+
+});
+
+
+/* =========================
+   一時停止
+========================= */
+
+audio.addEventListener("pause",()=>{
+
+  if(audio.currentTime > 0 &&
+     !audio.ended){
+
+    status.textContent =
+      "⏸️ 一時停止中";
+
+  }
+
+});
+
+
+/* =========================
+   戻る
+========================= */
+
+document
+.querySelector(".back")
+.onclick = ()=>{
 
   audio.pause();
 
@@ -297,14 +452,56 @@ document.querySelector(".back").onclick = () => {
 
   audio.load();
 
-  menu.style.display = "block";
+  practice.style.display =
+    "none";
 
-  practice.style.display = "none";
+  menu.style.display =
+    "block";
 
 };
 
+
+/* =========================
+   歌詞の自動ハイライト
+========================= */
+
+audio.addEventListener(
+"timeupdate",
+()=>{
+
+  const lines =
+    document.querySelectorAll(".line");
+
+  if(!audio.duration) return;
+
+  const current =
+    Math.floor(
+      (audio.currentTime /
+      audio.duration) *
+      lines.length
+    );
+
+  lines.forEach(line=>{
+    line.classList.remove("active");
+  });
+
+  if(lines[current]){
+
+    lines[current]
+      .classList.add("active");
+
+    lines[current]
+      .scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+      });
+
+  }
+
+});
 
 </script>
 
 </body>
 </html>
+```
