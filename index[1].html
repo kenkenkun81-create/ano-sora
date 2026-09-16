@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>あの空へ〜青のジャンプ〜 パート練習</title>
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:#f4f7fb;color:#172033}header{text-align:center;background:white;padding:25px 15px}main{max-width:900px;margin:auto;padding:22px 15px}.menu{display:grid;grid-template-columns:1fr 1fr;gap:14px}.part{padding:25px;border:0;border-radius:18px;background:white;font-size:22px;font-weight:bold;box-shadow:0 5px 20px #0001}.top{display:flex;justify-content:space-between;align-items:center}.back{padding:10px;border:0;border-radius:10px}audio{width:100%;margin:15px 0}.lyrics{height:60vh;overflow-y:auto;background:white;border-radius:18px;padding:25px;scroll-behavior:smooth}.line{text-align:center;font-size:25px;line-height:1.8;padding:9px;color:#94a3b8}.active{color:#111827;font-weight:bold;transform:scale(1.04)}#practice{display:none}@media(max-width:520px){.menu{grid-template-columns:1fr}.lyrics{height:60vh}}
+</style></head><body>
+<header><h1>あの空へ〜青のジャンプ〜</h1><div>パート練習</div></header><main>
+<section id="menu"><div class="menu">
+<button class="part" data-p="Soprano">ソプラノ</button><button class="part" data-p="Alto">アルト</button>
+<button class="part" data-p="Tenor">テノール</button><button class="part" data-p="Bass">ベース</button>
+</div></section>
+<section id="practice"><div class="top"><h2 id="title"></h2><button class="back">← 戻る</button></div>
+<audio id="audio" controls></audio><div class="lyrics" id="lyrics"></div></section></main>
+<script>
+const lyrics=[
+"空をかける鳥たちも","最初からうまく飛べたわけじゃない","初めての自転車","笑っていた","体中きずだらけ",
+"でも安全な道ってなに？ なに？","間違いのない生き方って何？ 何？","みんなが君の未来のためというけれど","僕の未来 本当にみえているの？",
+"上と下 果てしなくちぎれていく世界","すべてを乗り越え すすみたいんだ","JUMP UP","僕たちがきずつくのをとめないで","JUMP DOWN",
+"僕たちがまちがうのをとめないで","LET'S JUMP ALL THE BOYS AND GIRLS","僕たちが 僕たちが","目を閉じて飛ぶのは","よりゆたかになり かえってくるため",
+"JUMP UP","JUMP UP","JUMP UP","おとうさん さよなら もういくね","JUMP DOWN","おかあさん ありがとう わすれない",
+"LET'S JUMP ALL THE BOYS AND GIRLS","見つけよう 見つけよう","ちぎれていくこのせかいで","動くことのない 自分だけの場所を",
+"JUMP UP","JUMP UP","JUMP UP","ALL THE BOYS AND GIRLS","JUMP UP","ALL THE BOYS AND GIRLS","JUMP UP","JUMP UP","JUMP UP","JUMP UP",
+"見つけよう","ちぎれていく世界で","動くことのない 自分だけの場所を","さよなら","さよなら","さよなら もういくね",
+"ありがとう","ありがとう","ありがとう","わすれない","JUMP UP","JUMP UP","JUMP UP","JUMP UP","LET'S JUMP ALL","JUMP UP"];
+const box=document.getElementById("lyrics");
+lyrics.forEach((x,i)=>{let d=document.createElement("div");d.className="line";d.textContent=x;d.dataset.i=i;box.appendChild(d)});
+const files={Soprano:"Nコン2009「あの空へ ～青のジャンプ～」 Soprano (1).m4a",Alto:"Nコン2009「あの空へ ～青のジャンプ～」 Alto.m4a",Tenor:"Nコン2009「あの空へ ～青のジャンプ～」 Tenor.m4a",Bass:"Nコン2009「あの空へ ～青のジャンプ～」 Bass.m4a"};
+const names={Soprano:"ソプラノ",Alto:"アルト",Tenor:"テノール",Bass:"ベース"};
+const audio=document.getElementById("audio"),menu=document.getElementById("menu"),practice=document.getElementById("practice");
+document.querySelectorAll(".part").forEach(b=>b.onclick=()=>{let p=b.dataset.p;document.getElementById("title").textContent=names[p];audio.src=files[p];menu.style.display="none";practice.style.display="block";audio.play().catch(()=>{})});
+document.querySelector(".back").onclick=()=>{audio.pause();audio.removeAttribute("src");menu.style.display="block";practice.style.display="none"};
+</script></body></html>
